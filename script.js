@@ -2,7 +2,7 @@
 const video = document.getElementById('video')
 var previousFrameData
 var currentFrameData
- 
+
 Promise.all([
   faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
   faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
@@ -65,6 +65,7 @@ function motionDetection(oldData,newData,width,height)
     console.log("Started of video")
     return resultArray
   }
+
   for(var yp =0; yp<height;yp++){
     for(var xp=0;xp<width;xp++)
     {      
@@ -133,7 +134,6 @@ video.addEventListener('play', () => {
     ctx.drawImage(video, 0, 0);
     currentFrameData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     //resultArray is array of length 5, the first four indices correspond to motion in the 4 vertical sections in the screen
-    //and the last one indicates no motion in any section. The value is a boolean(1 or 0) indicating motion 0, or no motion 1
     var resultArray = motionDetection(previousFrameData,currentFrameData,canvas.width,canvas.height)
     abc += ((resultArray) + "\n");
     console.log(abc)
