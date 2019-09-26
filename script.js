@@ -57,9 +57,8 @@ function motionDetectionGrey(oldData,newData)
 
 function motionDetection(oldData,newData,width,height)
 {
-  // console.log(width+"In FUnction"+height)
-  var changedPixels=0
   var changedPixelsArray=[0,0,0,0]
+  var changedPixelsPoints = [[],[],[],[]]
   var resultArray=[0,0,0,0,1]
   const threshold=80
   if(oldData === undefined)
@@ -68,27 +67,27 @@ function motionDetection(oldData,newData,width,height)
     return resultArray
   }
   
-  for(var y =0; y<height;y++){
-    for(var x=0;x<width;x++)
+  for(var yp =0; yp<height;yp++){
+    for(var xp=0;xp<width;xp++)
     {      
-      var p = 4*y*width+4*x
+      var p = 4*yp*width+4*xp
       var r = Math.abs(newData.data[p]-oldData.data[p])
       var g = Math.abs(newData.data[p+1]-oldData.data[p+1])
       var b = Math.abs(newData.data[p+2]-oldData.data[p+2])
 
       if((r+b+g)>threshold){
-        changedPixelsArray[parseInt(4*x/width)]++
-        if(changedPixelsArray[parseInt(4*x/width)]>125){
-          resultArray[parseInt(4*x/width)]=1
+        changedPixelsArray[parseInt(4*xp/width)]++
+        changedPixelsPoints[parseInt(4*xp/width)].push({x:xp,y:yp})
+        if(changedPixelsArray[parseInt(4*xp/width)]>125){
+          resultArray[parseInt(4*xp/width)]=1
           resultArray[4]=0
-          x=(parseInt(4*x/width)+1)*(width/4)
-
-
+          xp=(parseInt(4*xp/width)+1)*(width/4)
 
         }
       }
     }
   }
+  // console.log(changedPixelsPoints)
   return resultArray
 
 }
@@ -145,16 +144,16 @@ video.addEventListener('play', () => {
     //and the last one indicates no motion in any section. The value is a boolean(1 or 0) indicating motion, or no motion 
     var resultArray = motionDetection(previousFrameData,currentFrameData,canvas.width,canvas.height)
 
-    var output='Motion Detected in '
+    var output=[]
     if(resultArray[0]==1)
-      console.log("Col 1")
+      output.push("Col 1")
     if(resultArray[1]==1)
-      console.log("Col 2")
+      output.push("Col 2")
     if(resultArray[2]==1)
-      console.log("Col 3")
+      output.push("Col 3")
     if(resultArray[3]==1)
-      console.log("Col 4")
-
+      output.push("Col 4")
+    console.log(output)
     previousFrameData=currentFrameData
   }, 100)
 })
