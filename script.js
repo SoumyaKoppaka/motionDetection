@@ -148,5 +148,5 @@ video.addEventListener('play', () => {
     document.body.appendChild(downloadLink);
     downloadLink.click();
     document.body.removeChild(downloadLink);
-  }, 10000)
+  }, 5000)
 })
